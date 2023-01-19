@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="margin-bottom: 20px;">
+        <input type="number" name="start" id="start" value="1">
+        <span style="padding: 10px;">-</span>
+        <input type="number" name="end" id="end" value="250">
+    </div>
+    <div style="margin-bottom: 20px;">
+        <input type="number" name="speed" id="speed" value="100">
+        <span style="padding: 10px;">-</span>
+        <button id="run" style="margin-top: 10px;">run</button>
+    </div>
+    <div id="app" style="width: 600px;">
+        <img src="./0001.jpg" alt="" srcset="" id="image" style="max-width: 100%;"/>
+        <div id="des">
+
+        </div>
+    </div>
+    <script>
+        let current = 0;
+        let start = document.getElementById('start')
+        let end = document.getElementById('end')
+        let run = document.getElementById('run')
+        let image = document.getElementById('image')
+        let des = document.getElementById('des')
+        let speed = document.getElementById('speed')
+        let timeline = null;
+        run.addEventListener('click',function(){
+            current = Number(start.value);
+            clearInterval(timeline)
+            const timeout = Math.round(100 / (Number(speed.value)/100));
+            console.log(timeout);
+            timeline = setInterval(()=>{
+                if(current<end.value){
+                    const re = RegExp(`0{${current.toString().length}}$`)
+                    image.src = './0000'.replace(re, current) + '.jpg';
+                    current +=1;
+                    des.innerText = "image: " + current
+                }else{
+                    clearInterval(timeline)
+                }
+            },timeout)
+        })
+    </script>
+</body>
+</html>
