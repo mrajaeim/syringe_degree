@@ -4,6 +4,7 @@ from torch.utils.data import Dataset
 import cv2 as cv
 import os
 
+
 class ConvNet(torch.nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
@@ -25,27 +26,19 @@ class ConvNet(torch.nn.Module):
 
 
 class ImageDataset(Dataset):
-    def __init__(self, root_dir, transform=None, split=0.9):
+    def __init__(self, root_dir):
         self.root_dir = root_dir
-        self.transform = transform
         self.images = []
         self.Y = []
         for image_name in os.listdir(root_dir):
-                image_path = os.path.join(root_dir, image_name)
-                self.images.append(image_path)
-                self.Y.append(image_name[-10:-4])
-        self.images = torch.tensor(self.images)
-        self.Y = torch.tensor(self.Y)
-        self.split_index = int(split * len(self.images))
-        self.train_images = self.images[:self.split_index]
-        self.train_labels = self.Y[:self.split_index]
-        self.test_images = self.images[self.split_index:]
-        self.test_labels = self.Y[self.split_index:]
+            image_path = os.path.join(root_dir, image_name)
+            img = cv.imread(image_path)
+            img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+            self.images.append(img)
+            self.Y.append(image_name[-10:-4])
+
     def __len__(self):
         return len(self.images)
 
     def __getitem__(self, idx):
-        img = cv.imread(self.images[idx])
-        img = cv.cvtColor(img,cv.COLOR_BGR2RGB)
-        label = self.Y[idx]
-        return (img, label)
+        return (self.images[idx], self.Y[idx])
