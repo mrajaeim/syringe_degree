@@ -5,3 +5,4 @@ backup
 .vscode/
 *.docx
 __pycache__
+docs
